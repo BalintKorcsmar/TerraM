@@ -5,16 +5,21 @@ import terra.board.InvalidBuildException;
 import terra.board.InvalidUpgradeException;
 import terra.board.Tile;
 import terra.board.TileNotEmptyException;
+import terra.board.TileType;
 import terra.resources.*;
 import terra.unit.BuildingFactory;
 import terra.unit.BuildingType;
 
 public abstract class Player implements Actions {
-    private int SpadeLevel;
+    private int SpadeCost;
+    private int shipLevel;
     protected Resource resource;
     protected String color;
-    
+
     protected static BuildingFactory bFactory = new BuildingFactory();
+
+    private final Resource SpadeUpgradeCost = new Resource(2, 5, 1);
+    private final Resource ShipUpgradeCost = new Resource(0, 4, 1);
 
     public Resource getResource() {
         return resource;
@@ -40,12 +45,37 @@ public abstract class Player implements Actions {
         
     }
 
-    public int getSpadeLevel() {
-        return SpadeLevel;
+    public int getSpadeCost() {
+        return SpadeCost;
     }
 
-    public void setSpadeLevel(int spadeLevel) {
-        SpadeLevel = spadeLevel;
+    public void setSpadeCost(int SpadeCost) {
+        this.SpadeCost = SpadeCost;
+    }
+
+    public void decrementSpadeCost() throws SpadeUpgradeException {
+        if(this.getSpadeCost() == 1) {
+            throw new SpadeUpgradeException(1);
+        }
+        else {
+            this.SpadeCost -= 1;
+        }
+    }
+
+    public int getShipLevel() {
+        return shipLevel;
+    }
+
+    public void setShipLevel(int shipLevel) {
+        this.shipLevel = shipLevel;
+    }
+
+    public void incrementShipLevel() throws ShipUpgradeException {
+        if(this.getShipLevel() == 3) {
+            throw new ShipUpgradeException(3);
+        } else {
+            this.shipLevel += 1;
+        }
     }
 
     public abstract Resource getCost(int x, int y, BuildingType building );
@@ -59,19 +89,24 @@ public abstract class Player implements Actions {
                 this.resource.Spend(this.getCost(x, y, building));
                 tile.TransformTile(this.getColor());
             } catch (TileNotEmptyException e) {
-                System.out.format("Cannot build new Dwelling on a non empty tile! There is a %s %s building on the %d/%d tile.", e.getBuilding().getColor(),
+                System.out.format("Cannot build new Dwelling on a non empty tile! There is a %s %s building on the %d/%d tile.\n", e.getBuilding().getColor(),
                         e.getBuilding().getBuildingType().toString(),
                         tile.getX() + 1,
                         tile.getY() + 1);
             } catch (InvalidUpgradeException e) {
-                System.out.format("Cannot upgrade a %s %s building to a %s %s one on the %d/%d tile.", e.getCurrent().getColor(),
+                System.out.format("Cannot upgrade a %s %s building to a %s %s on the %d/%d tile.\n", e.getCurrent().getColor(),
                                                                                                        e.getCurrent().getBuildingType().toString(),
                                                                                                        e.getDesired().getColor(),
                                                                                                        e.getDesired().getBuildingType().toString(),
                                                                                                        tile.getX() + 1,
                                                                                                        tile.getY() + 1);
             } catch (InvalidBuildException e) {
-                e.printStackTrace();
+               if(e.getType() == TileType.RIVER) {
+                   System.out.println("Cannot build any building on a river tile");
+               }
+               else {
+                   System.out.format("Cannot build a %s building on an empty tile", e.getDesired().getBuildingType().toString());
+               }
             } catch (InsufficientResourceException e) {
                 e.printStackTrace();
             }
@@ -80,7 +115,7 @@ public abstract class Player implements Actions {
             try {
                 this.resource.Spend(this.getCost(x, y, BuildingType.DWELLING));
             } catch (InsufficientResourceException e) {
-                System.out.println("Not enough resource to build structure! Need:");
+                System.out.println("Not enough resource to build structure! Need:\n");
                 e.getNeeds().print();
             }
         }
@@ -94,4 +129,35 @@ public abstract class Player implements Actions {
     public void UpgradeStructure(int x, int y, BuildingType building) {
         BuildStructure(x, y, building);
     }
+
+    public void UpgradeSpades() {
+        try {
+            if(this.getSpadeCost() == 1) {
+                this.decrementSpadeCost();
+            }
+            this.resource.Spend(SpadeUpgradeCost);
+            this.decrementSpadeCost();
+        } catch (InsufficientResourceException e) {
+            System.out.println("Not enough resource to upgrade your spades! Need:");
+            e.getNeeds().print();
+        } catch (SpadeUpgradeException e) {
+            System.out.println("Cannot upgrade spade further than level 3.");
+        }
+    }
+
+    public void AdvanceOnShippingTrack() {
+        try {
+            if(this.getShipLevel() == 3) {
+                this.incrementShipLevel();
+            }
+            this.resource.Spend(ShipUpgradeCost);
+            this.incrementShipLevel();
+        } catch (InsufficientResourceException e) {
+            System.out.println("Not enough resource to upgrade your spades! Need:");
+            e.getNeeds().print();
+        } catch (ShipUpgradeException e) {
+            System.out.println("Cannot upgrade spade further than level 3.");
+        }
+    }
 }
+

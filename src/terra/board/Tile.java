@@ -38,6 +38,9 @@ public class Tile {
     public void setBuilding(Building building) throws TileNotEmptyException,
                                                       InvalidUpgradeException,
                                                       InvalidBuildException {
+        if(this.getType() == TileType.RIVER) {
+            throw new InvalidBuildException(building, this.getType());
+        }
         if(!this.isEmpty()) {
             if(building.getBuildingType() == BuildingType.DWELLING) {
                 throw new TileNotEmptyException(this.getBuilding());
@@ -83,7 +86,7 @@ public class Tile {
                 this.building = building;
             }
             else {
-                throw new InvalidBuildException(building);
+                throw new InvalidBuildException(building, this.getType());
             }
         }
     }
@@ -103,32 +106,20 @@ public class Tile {
         this.type = type;
     }
 
-    public String TypeToString() {
-        switch(this.getType()) {
-        case DESERT:
-            return "Desert";
-        case FOREST:
-            return "Forest";
-        case LAKES:
-            return "Lakes";
-        case MOUNTAINS:
-            return "Mountains";
-        case PLAINS:
-            return "Plains";
-        case RIVER:
-            return "River";
-        case SWAMP:
-            return "Swamp";
-        case WASTELAND:
-            return "Wasteland";
-        default:
-            return "Invalid";
-        }
-        
+    public int GetDistance(int x, int y, String color) {
+        Board board = Board.getInstance();
+        TileType source = board.getTile(x, y).getType();
+        TileType destination = board.terrain.get(color);
+
+        int sourceIndex = board.tileorder.indexOf(source); 
+        int destinationIndex = board.tileorder.indexOf(destination);
+
+        return Math.abs(sourceIndex - destinationIndex);
     }
 
     public void TransformTile(String color) {
-        TileType desired = Board.terrain.get(color);
+        Board board = Board.getInstance();
+        TileType desired = board.terrain.get(color);
         if(this.getType() == desired) {
             return;
         } 
