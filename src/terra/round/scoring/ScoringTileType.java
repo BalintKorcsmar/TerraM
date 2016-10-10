@@ -24,7 +24,7 @@ public enum ScoringTileType {
         case PLACE_STRONGTUARY_WHITE:
             return "Place a stronghold or a sanctuary White";
         case PLACE_TEMPLE:
-            return "Found a Temple";
+            return "Place a Temple";
         case PLACE_TRADING_BLUE:
             return "Place a Trading House Blue";
         case PLACE_TRADING_WHITE:
