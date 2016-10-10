@@ -17,7 +17,7 @@ public enum EndRoundCondition {
         case ONE_BROWN:
             return "One Brown";
         case PLACE_PRIEST:
-            return "Place a priest to the cultist track";
+            return "Priest placed to the cultist track";
         case TWO_RED:
             return "Two Red";
         case TWO_WHITE:

@@ -1,4 +1,10 @@
 package terra.round.scoring;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 /**
  * 
  * @author ekorbal
@@ -80,5 +86,31 @@ public final class ScoringTile {
             
             }
         }
+    }
+
+    public static List<ScoringTile> drawTiles() {
+        List<ScoringTile> scoringTilesDrawn = new ArrayList<ScoringTile> ();
+
+        List<ScoringTile> scoringTilesSet = new ArrayList<ScoringTile>(Arrays.asList(
+                new ScoringTile.ScoringTileBuilder().build(ScoringTileType.PLACE_DWELLING_BLUE),
+                new ScoringTile.ScoringTileBuilder().build(ScoringTileType.PLACE_DWELLING_RED),
+                new ScoringTile.ScoringTileBuilder().build(ScoringTileType.PLACE_TRADING_WHITE),
+                new ScoringTile.ScoringTileBuilder().build(ScoringTileType.PLACE_TRADING_BLUE),
+                new ScoringTile.ScoringTileBuilder().build(ScoringTileType.PLACE_TEMPLE),
+                new ScoringTile.ScoringTileBuilder().build(ScoringTileType.PLACE_STRONGTUARY_WHITE),
+                new ScoringTile.ScoringTileBuilder().build(ScoringTileType.PLACE_STRONGTUARY_RED),
+                new ScoringTile.ScoringTileBuilder().build(ScoringTileType.TRANSFORM),
+                new ScoringTile.ScoringTileBuilder().build(ScoringTileType.FOUND_TOWN)));
+
+        int drawnTileNum = 0;
+        Random rand = new Random();
+
+        while(drawnTileNum < 6) {
+            int index = rand.nextInt(8 - drawnTileNum++);
+            scoringTilesDrawn.add(scoringTilesSet.get(index));
+            scoringTilesSet.remove(index);
+        }
+
+        return scoringTilesDrawn;
     }
 }

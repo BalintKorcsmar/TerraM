@@ -12,7 +12,6 @@ public abstract class Dashboard {
     protected int sanctuary;
     protected int stronghold;
 
-
     public Dashboard() {
         this.dwellings = 8;
         this.tradingHouses = 4;

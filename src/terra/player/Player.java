@@ -4,7 +4,6 @@ import terra.board.*;
 import terra.dashboard.Dashboard;
 import terra.dashboard.NoMoreBuildingException;
 import terra.resources.*;
-import terra.unit.BuildingFactory;
 import terra.unit.BuildingType;
 
 public abstract class Player implements Actions {
@@ -13,8 +12,6 @@ public abstract class Player implements Actions {
     protected Resource resource;
     protected String color;
     protected Dashboard dashboard;
-
-    protected static BuildingFactory bFactory = new BuildingFactory();
 
     private final Resource SpadeUpgradeCost = new Resource(2, 5, 1);
     private final Resource ShipUpgradeCost = new Resource(0, 4, 1);
@@ -84,26 +81,42 @@ public abstract class Player implements Actions {
         }
     }
 
-    public abstract Resource getCost(int x, int y, BuildingType building );
+    protected abstract Resource getBuildingCost(BuildingType building, boolean isNeighbor );
 
-    private void BuildStructure(int x, int y, BuildingType building) {
+    public Resource getCost(int x, int y, BuildingType building, boolean isNeighbor) {
+        int transformCost = Board.getInstance().getTile(x, y).getSteps(x, y, this.getColor()) * this.getSpadeCost();
+        Resource res = new Resource(transformCost + getBuildingCost(building, isNeighbor).getWorker(),getBuildingCost(building, isNeighbor).getGold(),0);
+        return res;
+    }
+
+    private boolean BuildStructure(int x, int y, BuildingType building) {
         Tile tile = Board.getInstance().getTile(x, y);
+        boolean isNeighborTile = tile.isNeighbor();
+        boolean result = false;
 
-        if(this.resource.CanSpend(this.getCost(x, y, building))) {
+        if(this.resource.CanSpend(this.getCost(x, y, building, isNeighborTile))) {
             try {
-                tile.setBuilding(building, this.getColor());
-                this.resource.Spend(this.getCost(x, y, building));
+                result = tile.setBuilding(building, this.getColor());
+                this.resource.Spend(this.getCost(x, y, building, isNeighborTile));
                 tile.TransformTile(this.getColor());
             } catch (TileNotEmptyException e) {
                 System.out.format("Cannot build new Dwelling on a non empty tile! There is a %s %s building on the %d/%d tile.\n", e.getBuilding().getColor(),
                         e.getBuilding().getBuildingType().toString(),
-                        tile.getX() + 1,
-                        tile.getY() + 1);
+                        tile.getRow() + 1,
+                        tile.getColumn() + 1);
             } catch (InvalidUpgradeException e) {
+                if (e instanceof InvalidColorException) {
+                    System.out.format("Cannot upgrade a %s %s building to a %s %s on the %d/%d tile.\n",((InvalidColorException) e).getCurrentColor(), e.getCurrent().toString(),
+                                                                                                        ((InvalidColorException) e).getDesiredColor(),
+                                                                                                        e.getDesired().toString(),
+                                                                                                        tile.getRow() + 1,
+                                                                                                        tile.getColumn() + 1);
+
+                }
                 System.out.format("Cannot upgrade a %s building to a %s on the %d/%d tile.\n",e.getCurrent().toString(),
                                                                                                        e.getDesired().toString(),
-                                                                                                       tile.getX() + 1,
-                                                                                                       tile.getY() + 1);
+                                                                                                       tile.getRow() + 1,
+                                                                                                       tile.getColumn() + 1);
             } catch (InvalidBuildException e) {
                if(e.getType() == TileType.RIVER) {
                    System.out.println("Cannot build any building on a river tile!");
@@ -119,17 +132,22 @@ public abstract class Player implements Actions {
         }
         else {
             try {
-                this.resource.Spend(this.getCost(x, y, BuildingType.DWELLING));
+                this.resource.Spend(this.getCost(x, y, BuildingType.DWELLING, isNeighborTile));
             } catch (InsufficientResourceException e) {
                 System.out.println("Not enough resource to build structure! Need:\n");
                 e.getNeeds().print();
             }
         }
+        return result;
     }
     
     /* Implementation of the Actions interface */
     public void TransformAndBuild(int x, int y) {
-        BuildStructure(x, y, BuildingType.DWELLING);
+        boolean result;
+        result = BuildStructure(x, y, BuildingType.DWELLING);
+        if(result) {
+            PlayerAccess.getInstance().incrementCurrentPlayer();
+        }
     }
 
     public void UpgradeStructure(int x, int y, BuildingType building) {
@@ -165,5 +183,8 @@ public abstract class Player implements Actions {
             System.out.println("Cannot upgrade spade further than level 3.");
         }
     }
+
+    public abstract FactionTypes getFaction();
+
 }
 

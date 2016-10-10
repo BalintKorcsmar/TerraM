@@ -159,7 +159,12 @@ public class Board {
         return instance;
     }
 
-    public Tile getTile(int x, int y) {
-        return this.tiles[x][y];
+    public Tile getTile(int row, int column) {
+        if(row >= 0 && row <= 8 && column >= 0 && column <= 12) {
+            return this.tiles[row][column];
+        }
+        else {
+            return null;
+        }
     }
 }
