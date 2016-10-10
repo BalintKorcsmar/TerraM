@@ -2,8 +2,7 @@ package terra.main;
 
 import terra.board.Board;
 import terra.board.Tile;
-import terra.player.RedPlayer;
-
+import terra.player.ChaosMagician;
 import terra.unit.BuildingType;
 
 public class TerraMain {
@@ -11,37 +10,70 @@ public class TerraMain {
     public static void main(String[] args) {
 
         Board board = Board.getInstance();
-        RedPlayer red = RedPlayer.getInstance();
+        ChaosMagician red = ChaosMagician.getInstance();
         red.print();
 
-        red.TransformAndBuild(6, 5);
+        red.getDashboard().print();
+
         Tile tile = board.getTile(6, 5);
-        System.out.format("\n\nThe building on the %d/%d %s tile is a %s %s.\n", tile.getX() + 1,tile.getY() + 1, tile.getType().toString(), red.getColor(), tile.getBuilding().toString());
+        tile.print();
+
+        red.TransformAndBuild(6, 5);
+        tile = board.getTile(6, 5);
+        tile.print();
         red.print();
 
         red.TransformAndBuild(6, 6);
         tile = board.getTile(6, 6);
-        System.out.format("\n\nThe building on the %d/%d %s tile is a %s %s.\n", tile.getX() + 1,tile.getY() + 1, tile.getType().toString(), red.getColor(), tile.getBuilding().toString());
+        tile.print();
         red.print();
 
         red.TransformAndBuild(7, 9);
         tile = board.getTile(7, 9);
-        System.out.format("\n\nThe building on the %d/%d %s tile is a %s %s.\n", tile.getX() + 1,tile.getY() + 1, tile.getType().toString(), red.getColor(), tile.getBuilding().toString());
+        tile.print();
         red.print();
 
         red.TransformAndBuild(6, 5);
         tile = board.getTile(6, 5);
 
         red.UpgradeStructure(6, 5, BuildingType.SANCTUARY);
-        System.out.format("\n\nThe building on the %d/%d %s tile is a %s %s.\n", tile.getX() + 1,tile.getY() + 1, tile.getType().ToString(), red.getColor(), tile.getBuilding().toString());
+        tile.print();
         red.print();
 
         red.UpgradeStructure(6, 5, BuildingType.TRADING_HOUSE);
-        System.out.format("\n\nThe building on the %d/%d %s tile is a %s %s.\n", tile.getX() + 1,tile.getY() + 1, tile.getType().ToString(), red.getColor(), tile.getBuilding().toString());
+        tile.print();
         red.print();
 
         red.UpgradeStructure(6, 5, BuildingType.STRONGHOLD);
-        System.out.format("\n\nThe building on the %d/%d %s tile is a %s %s.\n", tile.getX() + 1,tile.getY() + 1, tile.getType().ToString(), red.getColor(), tile.getBuilding().toString());
+        tile.print();
         red.print();
+
+        tile = board.getTile(7, 9);
+        red.UpgradeStructure(7, 9, BuildingType.TRADING_HOUSE);
+        tile.print();
+        red.print();
+
+        red.UpgradeStructure(7, 9, BuildingType.TEMPLE);
+        tile.print();
+        red.print();
+
+        tile = board.getTile(8, 7);
+        red.TransformAndBuild(8, 7);
+        tile.print();
+        red.print();
+
+        red.UpgradeStructure(8, 7, BuildingType.TRADING_HOUSE);
+        tile.print();
+        red.print();
+
+        red.UpgradeStructure(8, 7, BuildingType.TEMPLE);
+        tile.print();
+        red.print();
+
+        red.UpgradeStructure(8, 7, BuildingType.SANCTUARY);
+        tile.print();
+        red.print();
+
+        red.getDashboard().print();
     }
 }

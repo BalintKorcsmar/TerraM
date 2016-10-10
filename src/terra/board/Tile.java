@@ -1,17 +1,22 @@
 package terra.board;
 
+import java.util.Optional;
+
+import terra.dashboard.NoMoreBuildingException;
+import terra.player.PlayerAccess;
 import terra.unit.Building;
 import terra.unit.BuildingType;
 
 public class Tile {
     private int x, y;
-    private Building building;
+//    private Building building;
+    private Optional<Building> building;
     private TileType type;
 
     public Tile(int x, int y, TileType type) {
         this.setX(x);
         this.setY(y);
-        building = null;
+        building = Optional.empty();
         this.setType(type);
     }
 
@@ -31,49 +36,50 @@ public class Tile {
         this.y = y;
     }
 
-    public Building getBuilding() {
+    public Optional<Building> getBuilding() {
         return building;
     }
 
-    public void setBuilding(Building building) throws TileNotEmptyException,
-                                                      InvalidUpgradeException,
-                                                      InvalidBuildException {
+    public void setBuilding(BuildingType buildingType, String color) throws TileNotEmptyException,
+                                                                            InvalidUpgradeException,
+                                                                            InvalidBuildException,
+                                                                            NoMoreBuildingException {
         if(this.getType() == TileType.RIVER) {
-            throw new InvalidBuildException(building, this.getType());
+            throw new InvalidBuildException(buildingType, this.getType());
         }
-        if(!this.isEmpty()) {
-            if(building.getBuildingType() == BuildingType.DWELLING) {
-                throw new TileNotEmptyException(this.getBuilding());
+        if(this.getBuilding().isPresent()) {
+            if( buildingType == BuildingType.DWELLING) {
+                throw new TileNotEmptyException(this.getBuilding().get());
             }
             
-            switch(this.getBuilding().getBuildingType()) {
+            switch(this.getBuilding().get().getBuildingType()) {
                 case DWELLING:
-                    if(building.getBuildingType() == BuildingType.TRADING_HOUSE) {
-                        this.building = building;
+                    if(buildingType == BuildingType.TRADING_HOUSE) {
+                        this.building = Optional.of(PlayerAccess.getPlayer(color).getDashboard().getBuilding(buildingType, color));
                     } 
                     else {
-                        throw new InvalidUpgradeException(this.getBuilding(), building);
+                        throw new InvalidUpgradeException(this.getBuilding().get().getBuildingType(), buildingType);
                     }
                     break;
                 case SANCTUARY:
-                    throw new InvalidUpgradeException(this.getBuilding(), building);
+                    throw new InvalidUpgradeException(this.getBuilding().get().getBuildingType(), buildingType);
                 case STRONGHOLD:
-                    throw new InvalidUpgradeException(this.getBuilding(), building);
+                    throw new InvalidUpgradeException(this.getBuilding().get().getBuildingType(), buildingType);
                 case TEMPLE:
-                    if(building.getBuildingType() == BuildingType.SANCTUARY) {
-                        this.building = building;
+                    if(buildingType == BuildingType.SANCTUARY) {
+                        this.building = Optional.of(PlayerAccess.getPlayer(color).getDashboard().getBuilding(buildingType, color));
                     } 
                     else {
-                        throw new InvalidUpgradeException(this.getBuilding(), building);
+                        throw new InvalidUpgradeException(this.getBuilding().get().getBuildingType(), buildingType);
                     }
                     break;
                 case TRADING_HOUSE:
-                    if(building.getBuildingType() == BuildingType.STRONGHOLD ||
-                       building.getBuildingType() == BuildingType.TEMPLE) {
-                        this.building = building;
+                    if(buildingType == BuildingType.STRONGHOLD ||
+                       buildingType == BuildingType.TEMPLE) {
+                        this.building = Optional.of(PlayerAccess.getPlayer(color).getDashboard().getBuilding(buildingType, color));
                     }
                     else {
-                        throw new InvalidUpgradeException(this.getBuilding(), building);
+                        throw new InvalidUpgradeException(this.getBuilding().get().getBuildingType(), buildingType);
                     }
                     break;
                 default:
@@ -82,11 +88,11 @@ public class Tile {
             }
         }
         else {
-            if(building.getBuildingType() == BuildingType.DWELLING) {
-                this.building = building;
+            if(buildingType == BuildingType.DWELLING) {
+                this.building = Optional.of(PlayerAccess.getPlayer(color).getDashboard().getBuilding(buildingType, color));
             }
             else {
-                throw new InvalidBuildException(building, this.getType());
+                throw new InvalidBuildException(buildingType, this.getType());
             }
         }
     }
@@ -125,6 +131,19 @@ public class Tile {
         } 
         else {
             this.setType(desired);
+        }
+    }
+
+    public void print() {
+        if(this.getBuilding().isPresent()) {
+            System.out.format("\n\nThe building on the %d/%d %s tile is a %s %s.\n", this.getX() + 1, this.getY() + 1,
+                                                                                     this.getType().toString(),
+                                                                                     this.getBuilding().get().getColor(),
+                                                                                     this.getBuilding().get().toString());
+        }
+        else {
+            System.out.format("\n\nThe %d/%d %s tile is empty.\n", this.getX() + 1, this.getY() + 1,
+                                                                   this.getType().toString());
         }
     }
 }

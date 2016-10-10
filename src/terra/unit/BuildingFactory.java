@@ -7,13 +7,13 @@ public class BuildingFactory {
             case DWELLING:
                 return new Dwelling(color);
             case TRADING_HOUSE:
-                return new TradingHouse();
+                return new TradingHouse(color);
             case TEMPLE:
-                return new Temple();
+                return new Temple(color);
             case SANCTUARY:
-                return new Sanctuary();
+                return new Sanctuary(color);
             case STRONGHOLD:
-                return new Stronghold();
+                return new Stronghold(color);
             default:
                 return null;
         }

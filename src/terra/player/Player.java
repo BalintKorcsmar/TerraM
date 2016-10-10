@@ -1,11 +1,8 @@
 package terra.player;
 
-import terra.board.Board;
-import terra.board.InvalidBuildException;
-import terra.board.InvalidUpgradeException;
-import terra.board.Tile;
-import terra.board.TileNotEmptyException;
-import terra.board.TileType;
+import terra.board.*;
+import terra.dashboard.Dashboard;
+import terra.dashboard.NoMoreBuildingException;
 import terra.resources.*;
 import terra.unit.BuildingFactory;
 import terra.unit.BuildingType;
@@ -15,6 +12,7 @@ public abstract class Player implements Actions {
     private int shipLevel;
     protected Resource resource;
     protected String color;
+    protected Dashboard dashboard;
 
     protected static BuildingFactory bFactory = new BuildingFactory();
 
@@ -38,7 +36,15 @@ public abstract class Player implements Actions {
     public void setColor(String color) {
         this.color = color;
     }
-    
+
+    public Dashboard getDashboard() {
+        return this.dashboard;
+    }
+
+    public void setDashboard(Dashboard dashboard) {
+        this.dashboard = dashboard;
+    }
+
     public void print() {
         System.out.format("Hello! This is the %s player.\n", color);
         resource.print();
@@ -85,7 +91,7 @@ public abstract class Player implements Actions {
 
         if(this.resource.CanSpend(this.getCost(x, y, building))) {
             try {
-                tile.setBuilding(bFactory.getBuilding(building, this.getColor()));
+                tile.setBuilding(building, this.getColor());
                 this.resource.Spend(this.getCost(x, y, building));
                 tile.TransformTile(this.getColor());
             } catch (TileNotEmptyException e) {
@@ -94,21 +100,21 @@ public abstract class Player implements Actions {
                         tile.getX() + 1,
                         tile.getY() + 1);
             } catch (InvalidUpgradeException e) {
-                System.out.format("Cannot upgrade a %s %s building to a %s %s on the %d/%d tile.\n", e.getCurrent().getColor(),
-                                                                                                       e.getCurrent().getBuildingType().toString(),
-                                                                                                       e.getDesired().getColor(),
-                                                                                                       e.getDesired().getBuildingType().toString(),
+                System.out.format("Cannot upgrade a %s building to a %s on the %d/%d tile.\n",e.getCurrent().toString(),
+                                                                                                       e.getDesired().toString(),
                                                                                                        tile.getX() + 1,
                                                                                                        tile.getY() + 1);
             } catch (InvalidBuildException e) {
                if(e.getType() == TileType.RIVER) {
-                   System.out.println("Cannot build any building on a river tile");
+                   System.out.println("Cannot build any building on a river tile!");
                }
                else {
-                   System.out.format("Cannot build a %s building on an empty tile", e.getDesired().getBuildingType().toString());
+                   System.out.format("Cannot build a %s building on an empty tile!", e.getDesired().toString());
                }
             } catch (InsufficientResourceException e) {
                 e.printStackTrace();
+            } catch (NoMoreBuildingException e) {
+                System.out.format("No more %s building on the dashboard!", e.getBuilding().toString());
             }
         }
         else {

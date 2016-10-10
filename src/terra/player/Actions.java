@@ -8,7 +8,7 @@ public interface Actions {
     public void AdvanceOnShippingTrack();
 
     public void UpgradeSpades();
-//
+
     public void UpgradeStructure(int x, int y, BuildingType building);
 //
 //    public void SendPriestToOrderOfCult(String color);

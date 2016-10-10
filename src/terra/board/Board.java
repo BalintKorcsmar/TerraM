@@ -124,19 +124,19 @@ public class Board {
         this.tiles[7][11] = new Tile(7, 11, TileType.MOUNTAINS);
         this.tiles[7][12] = null;
 
-        this.tiles[8][0] = new Tile(7, 0, TileType.WASTELAND);
-        this.tiles[8][1] = new Tile(7, 1, TileType.SWAMP);
-        this.tiles[8][2] = new Tile(7, 2, TileType.MOUNTAINS);
-        this.tiles[8][3] = new Tile(7, 3, TileType.LAKES);
-        this.tiles[8][4] = new Tile(7, 4, TileType.WASTELAND);
-        this.tiles[8][5] = new Tile(7, 5, TileType.FOREST);
-        this.tiles[8][6] = new Tile(7, 6, TileType.DESERT);
-        this.tiles[8][7] = new Tile(7, 7, TileType.WASTELAND);
-        this.tiles[8][8] = new Tile(7, 8, TileType.MOUNTAINS);
-        this.tiles[8][9] = new Tile(7, 9, TileType.RIVER);
-        this.tiles[8][10] = new Tile(7, 10, TileType.LAKES);
-        this.tiles[8][11] = new Tile(7, 11, TileType.FOREST);
-        this.tiles[8][12] = new Tile(7, 12, TileType.WASTELAND);
+        this.tiles[8][0] = new Tile(8, 0, TileType.WASTELAND);
+        this.tiles[8][1] = new Tile(8, 1, TileType.SWAMP);
+        this.tiles[8][2] = new Tile(8, 2, TileType.MOUNTAINS);
+        this.tiles[8][3] = new Tile(8, 3, TileType.LAKES);
+        this.tiles[8][4] = new Tile(8, 4, TileType.WASTELAND);
+        this.tiles[8][5] = new Tile(8, 5, TileType.FOREST);
+        this.tiles[8][6] = new Tile(8, 6, TileType.DESERT);
+        this.tiles[8][7] = new Tile(8, 7, TileType.WASTELAND);
+        this.tiles[8][8] = new Tile(8, 8, TileType.MOUNTAINS);
+        this.tiles[8][9] = new Tile(8, 9, TileType.RIVER);
+        this.tiles[8][10] = new Tile(8, 10, TileType.LAKES);
+        this.tiles[8][11] = new Tile(8, 11, TileType.FOREST);
+        this.tiles[8][12] = new Tile(8, 12, TileType.WASTELAND);
 
         this.terrain.put("BROWN", TileType.PLAINS);
         this.terrain.put("BLACK", TileType.SWAMP);
