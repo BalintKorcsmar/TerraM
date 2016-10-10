@@ -15,6 +15,7 @@ public class Swarmlings extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new SwarmlingsDashboard();
+        this.factionImage = "faction_images/swarmlings.jpg";
     }
 
     @Override

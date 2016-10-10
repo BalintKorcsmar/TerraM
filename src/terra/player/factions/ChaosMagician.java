@@ -15,6 +15,7 @@ public class ChaosMagician extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new ChaosMagicianDashbord();
+        this.factionImage = "faction_images/chaos_magicians.jpg";
     }
 
     public static ChaosMagician getInstance() {

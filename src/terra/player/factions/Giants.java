@@ -17,6 +17,7 @@ public class Giants extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new GiantsDashboard();
+        this.factionImage = "faction_images/giants.jpg";
     }
 
     public static Giants getInstance() {

@@ -15,6 +15,7 @@ public class Engineers extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new EngineersDashboard();
+        this.factionImage = "faction_images/engineers.jpg";
     }
 
     @Override

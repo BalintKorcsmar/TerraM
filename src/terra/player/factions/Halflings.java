@@ -15,6 +15,7 @@ public class Halflings extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new HalflingsDashboard();
+        this.factionImage = "faction_images/halflings.jpg";
     }
 
     @Override

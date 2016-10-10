@@ -13,6 +13,8 @@ public abstract class Player implements Actions {
     protected String color;
     protected Dashboard dashboard;
 
+    protected String factionImage; 
+
     private final Resource SpadeUpgradeCost = new Resource(2, 5, 1);
     private final Resource ShipUpgradeCost = new Resource(0, 4, 1);
 
@@ -79,6 +81,10 @@ public abstract class Player implements Actions {
         } else {
             this.shipLevel += 1;
         }
+    }
+
+    public String getFactionImage() {
+        return factionImage;
     }
 
     protected abstract Resource getBuildingCost(BuildingType building, boolean isNeighbor );

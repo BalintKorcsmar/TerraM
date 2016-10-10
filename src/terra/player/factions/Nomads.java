@@ -15,6 +15,7 @@ public class Nomads extends Player{
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new NomadsDashboard();
+        this.factionImage = "faction_images/nomads.jpg";
     }
 
     @Override

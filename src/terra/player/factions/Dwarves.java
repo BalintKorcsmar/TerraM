@@ -15,6 +15,7 @@ public class Dwarves extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new DwarvesDashboard();
+        this.factionImage = "faction_images/dwarves.jpg";
     }
 
     @Override

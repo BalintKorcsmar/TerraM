@@ -15,6 +15,7 @@ public class Aclhemists extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new AlchemistDashboard();
+        this.factionImage = "faction_images/alchemists.jpg";
     }
     @Override
     protected Resource getBuildingCost(BuildingType building, boolean isNeighbor) {

@@ -22,6 +22,7 @@ public class Auren extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new AurenDashboard();
+        this.factionImage = "faction_images/auren.jpg";
     }
 
     /* (non-Javadoc)

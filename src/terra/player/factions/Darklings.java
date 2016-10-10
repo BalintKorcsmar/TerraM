@@ -15,6 +15,7 @@ public class Darklings extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new DarklingsDashboard();
+        this.factionImage = "faction_images/darklings.jpg";
     }
 
     @Override

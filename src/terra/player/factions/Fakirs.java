@@ -15,6 +15,7 @@ public class Fakirs extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new FakirsDashboard();
+        this.factionImage = "faction_images/fakirs.jpg";
     }
 
     @Override

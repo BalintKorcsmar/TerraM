@@ -22,6 +22,7 @@ public class Witches extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new WitchesDashboard();
+        this.factionImage = "faction_images/witches.jpg";
     }
 
     /* (non-Javadoc)

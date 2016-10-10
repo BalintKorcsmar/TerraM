@@ -22,6 +22,7 @@ public class Cultists extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new CultistsDashboard();
+        this.factionImage = "faction_images/cultists.jpg";
     }
     /* (non-Javadoc)
      * @see terra.player.Player#getCost(int, int, terra.unit.BuildingType)

@@ -15,6 +15,7 @@ public class Mermaids extends Player {
         this.setSpadeCost(3);
         this.setShipLevel(0);
         this.dashboard = new MermaidsDashboard();
+        this.factionImage = "faction_images/mermaids.jpg";
     }
 
     @Override
